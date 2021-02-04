@@ -1,1 +1,7 @@
+
+run in powershell
+cd to project  folder
+https://www.youtube.com/watch?v=wXDsMKJyK9c&ab_channel=YourTechRemote
+
+
 ffmpeg -framerate 30 -i exports/frames/%04d.png -vf "scale='min(1920,iw)':min'(1080,ih)':force_original_aspect_ratio=decrease,pad=1920:1080:-1:-1:color=white" -preset slow -crf 18 -c:v libx264 -level:v 4.0 -pix_fmt yuv420p exports/E5L-globe-animation.mp4

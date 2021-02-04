@@ -2,3 +2,12 @@
 .Rhistory
 .RData
 .Ruserdata
+
+
+# exclude data from source control by default
+/data/varstacks
+
+/exports/frames
+/exports
+
+.Rproj.user

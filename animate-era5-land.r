@@ -13,24 +13,27 @@ library(snowfall)
 rm(list=ls())
 
 
+# https://video.stackexchange.com/questions/20495/how-do-i-set-up-and-use-ffmpeg-in-windows
+
+
 # setup -------------------------------------------------------------------
 
 # settings
 outroot   = './exports/frames'
 overwrite = T
 flist     = list.files('./data/varstacks', full=T, patt='.tif$')
-basemap   = brick('./data/basemap_4326.tiff')[[-4]]
+# basemap   = brick('./data/basemap_4326.tiff')[[-4]]
 plotext   = extent(-6430000, 6430000, -6430000, 6430000)
 anisetup  = tibble(
   fn = flist,
   crmp = c('inferno','parula','tempo','magma','precip2',
            'temperature','davos','jet','wtspec','plasma',
            'turku','magma','elevnat1','spectral','globwarm',
-           'viridis','bluesice','magma'),
+           'viridis','bluesice','magma')[1:length(flist)],
   crmp_r = c(F,F,F,F,F,
              F,T,F,F,F,
              T,F,T,T,F,
-             F,T,F)
+             F,T,F)[1:length(flist)]
 )
 
 
@@ -52,6 +55,7 @@ varranges  = sfLapply(anisetup$fn, function(x){
   })
 })
 sfStop()
+
 varranges     = do.call(rbind,varranges)
 anisetup$low  = varranges[,1]
 anisetup$high = varranges[,2]
@@ -99,8 +103,8 @@ makePlot = function(
   pdat_pts     = rasterToPoints(pdat) %>% as_tibble %>% rename(z=3)
   
   # reproject base layer
-  basemap_proj = projectRaster(basemap, crs=crs(projdef), res=resolution)
-  baselayer    = ggRGB(basemap_proj,1,2,3,ggLayer=T)
+  # basemap_proj = projectRaster(basemap, crs=crs(projdef), res=resolution)
+  # baselayer    = ggRGB(basemap_proj,1,2,3,ggLayer=T)
   
   # clean up variable name for title
   varname = fn %>%
@@ -113,7 +117,7 @@ makePlot = function(
   
   # actual plotting
   ggplot(pdat_pts) + 
-    baselayer +
+    # baselayer +
     geom_raster(aes(x,y,fill=z), hjust=0.5, vjust=0.5, alpha=0.75) + 
     scale_fill_gradientn(colours=pkrf::ramp(colramp,rev=colramp_rev),
                          limits=c(l,h), oob=scales::squish, name=NULL) +
