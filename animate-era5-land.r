@@ -4,6 +4,7 @@
 
 library(tidyverse)
 library(pbapply)
+# devtools::install_github('kraaijenbrink/pkrf')
 library(pkrf)         # see kraaijenbrink/pkrf on github
 library(raster)
 library(ggspatial)
